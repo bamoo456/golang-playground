@@ -17,9 +17,12 @@ https://talks.golang.org/2014/names.slide#1
 
 #### Receiver Name
 
-The name of a method's receiver should be a reflection of its identity; 
-often a one or two letter abbreviation of its type suffices (such as "c" or "cl" for "Client"). 
-Don't use generic names such as "me", "this" or "self"
+**Don't use generic names such as "me", "this" or "self"**
+
+* The name of a method's receiver should be a reflection of its identity; 
+* Often a one or two letter abbreviation of its type suffices (such as "c" or "cl" for "Client"). 
+* The name need not be as descriptive as that of a method argument, as its role is obvious and serves no documentary purpose.
+* Be consistent, too: if you call the receiver "c" in one method, don't call it "cl" in another.
 
 Reference: 
 https://github.com/golang/go/wiki/CodeReviewComments#receiver-names
