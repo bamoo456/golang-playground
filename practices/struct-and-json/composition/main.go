@@ -29,7 +29,13 @@ func (atd attendee) greeting() string {
 func main() {
 	george := person{"Geroge", "Chen"}
 	attendeeGeorge := attendee{george, "Mrs."}
+	// also demo struct pointer
+	david := &person{"David", "Lee"}
+	fmt.Println("====demo struct pointer====")
+	fmt.Printf("type david: %T \n", david)
+	fmt.Println("david.fullName(): ", david.fullName())
 
+	fmt.Println("====demo embeded struct and composition====")
 	// use firstName and lastName directly from its person struct
 	fmt.Println(attendeeGeorge.firstName, attendeeGeorge.lastName)
 
