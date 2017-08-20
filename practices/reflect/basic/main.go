@@ -35,6 +35,13 @@ func main() {
 	mReflectValueType := getReflectType(mReflectValue)
 	fmt.Println(mReflectValueType)
 
+	// "reflect.Value" type support many methods, however,
+	// if the method does not match the current type, then it return panic
+
+	// e.g. use MapKeys() on "slice" type
+	// arr := []int{1, 2, 3}
+	// reflect.ValueOf(arr).MapKeys() // this will got
+
 }
 
 func getReflectType(v reflect.Value) string {
