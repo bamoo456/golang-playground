@@ -5,6 +5,11 @@ import (
 	"reflect"
 )
 
+type book struct {
+	name   string
+	author string
+}
+
 func main() {
 	var i int = 3
 	t := reflect.TypeOf(i)
@@ -39,9 +44,20 @@ func main() {
 	// if the method does not match the current type, then it return panic
 
 	// e.g. use MapKeys() on "slice" type
-	// arr := []int{1, 2, 3}
-	// reflect.ValueOf(arr).MapKeys() // this will got
+	arr := []int{1, 2, 3}
+	arrReflectValue := reflect.ValueOf(arr)
+	// arrReflectValue.MapKeys() // this will got
 
+	// walk through the map
+	walk(mReflectValue)
+
+	// walk through the slice
+	walk(arrReflectValue)
+
+	// walk through an customized struct
+	b := book{"text book", "George"}
+	bReflectValue := reflect.ValueOf(b)
+	walk(bReflectValue)
 }
 
 func getReflectType(v reflect.Value) string {
@@ -56,5 +72,44 @@ func getReflectType(v reflect.Value) string {
 		return "got the map"
 	default:
 		return "not implemented"
+	}
+}
+
+// recursively walk through
+func walk(v reflect.Value) {
+	switch v.Kind() {
+	case reflect.Invalid:
+		fmt.Println("invalid data")
+	case reflect.Slice, reflect.Array:
+		fmt.Println("Trying to walk through an [slice]/[array] type")
+		for i := 0; i < v.Len(); i++ {
+			walk(v.Index(i))
+		}
+	case reflect.Struct:
+		fmt.Println("Trying to walk through an [struct] type")
+		for i := 0; i < v.NumField(); i++ {
+			fmt.Printf("[field]=%s \n", v.Type().Field(i).Name)
+			walk(v.Field(i))
+		}
+	case reflect.Map:
+		fmt.Println("Trying to walk through an [map] type")
+		for _, key := range v.MapKeys() {
+			fmt.Printf("[key]=%s\n", key)
+			walk(v.MapIndex(key))
+		}
+	case reflect.Ptr:
+		if v.IsNil() {
+			fmt.Printf("data pointer = nil\n")
+		} else {
+			walk(v.Elem())
+		}
+	case reflect.Interface:
+		if v.IsNil() {
+			fmt.Printf("data interface = nil\n")
+		} else {
+			walk(v.Elem())
+		}
+	default: // basic types, channels, funcs
+		fmt.Printf("data value = %v \n", v)
 	}
 }
