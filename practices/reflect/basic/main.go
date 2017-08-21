@@ -87,6 +87,7 @@ func walk(v reflect.Value) {
 		}
 	case reflect.Struct:
 		fmt.Println("Trying to walk through an [struct] type")
+		// reflect also works on unexported fields
 		for i := 0; i < v.NumField(); i++ {
 			fmt.Printf("[field]=%s \n", v.Type().Field(i).Name)
 			walk(v.Field(i))
