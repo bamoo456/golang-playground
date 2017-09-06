@@ -17,7 +17,7 @@ func TestIsString(t *testing.T) {
 		{[]int{1, 2, 3}, false},
 		{"Hello world", true},
 		// failure case
-		{30.6, true},
+		//{30.6, true},
 	}
 
 	for _, test := range tests {
