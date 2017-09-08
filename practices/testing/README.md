@@ -77,24 +77,3 @@ go test -bench=. -benchmem
 go test -run=NONE -bench=BenchmarkCalcAvg
 
 ```
-
-
-#### Basic profiling command
-Profiling is part of benchmark tests with some flags specified 
-
-##### test command usage
-```
-# run the benchmark function `BenchmarkCalcAvg` and output its cpu profile log 
-go test -run=NONE -bench=BenchmarkCalcAvg -cpuprofile=cpu.log
-
-# run the benchmark function `ToJSONArray` of the package `golang-playground/practices/testing/lib` and ouput its log
-go test -run=NONE -bench=ToJSONArray -cpuprofile=profile.log golang-playground/practices/testing/lib
-
-# parse the log file
-go tool pprof -text -nodecount={how many significant operations} {the profile binary file} {the profile log file}
-
-# Use the go tool the parse the prifile log file
-go tool pprof -text -nodecount=10 ./lib.test profile.log
-```
-
-> NOTE: the profile binary file usually named as {package name}.test (e.g.: lib.test)
