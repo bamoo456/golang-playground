@@ -7,8 +7,19 @@ import "fmt"
 // introduced by the Gang of Four.[1]
 // The bridge uses encapsulation, aggregation, and can use inheritance to separate responsibilities into different classes.
 
+// Bridge pattern:
+
+// 1. It is a structural pattern
+// 2. Abstraction and implementation are not bound at compile time
+// 3. Abstraction and implementation - both can vary without impact in client
+// 4. Uses composition over inheritance.
+
 type driverCommand struct {
 	State string
+}
+
+type deviceOp interface {
+	Execute(driverCommand) error
 }
 
 type driverImpl interface {
@@ -55,19 +66,28 @@ type Device struct {
 }
 
 func (d Device) Execute(cmd driverCommand) error {
-	return d.driver.executeCmd(cmd)
+	if err := d.driver.open(); err != nil {
+		return err
+	}
+	if err := d.driver.executeCmd(cmd); err != nil {
+		return err
+	}
+	return d.driver.close()
+}
+
+func DeviceExecutor(op deviceOp, cmd driverCommand) error {
+	return op.Execute(cmd)
 }
 
 func main() {
 	screen := Device{videoDriver{}}
 	speaker := Device{audioDriver{}}
 
-	screen.Execute(driverCommand{
+	DeviceExecutor(screen, driverCommand{
 		"Turn up the brightness",
 	})
 
-	speaker.Execute(driverCommand{
+	DeviceExecutor(speaker, driverCommand{
 		"Turn off",
 	})
-
 }
